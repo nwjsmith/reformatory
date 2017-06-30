@@ -1,5 +1,7 @@
 # Reformatory
 
+[![CircleCI](https://circleci.com/gh/nwjsmith/reformatory.svg?style=svg)](https://circleci.com/gh/nwjsmith/reformatory)
+
 Coming soon.
 
 ## License
