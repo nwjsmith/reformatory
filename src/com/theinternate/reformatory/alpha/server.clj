@@ -1,16 +1,11 @@
 (ns com.theinternate.reformatory.alpha.server
-  (:require [cognitect.transit :as transit])
+  (:require [com.theinternate.reformatory.alpha.service :as service])
   (:import (io.grpc BindableService
-                    MethodDescriptor
-                    MethodDescriptor$Marshaller
-                    MethodDescriptor$MethodType
                     Server
                     ServerServiceDefinition)
            (io.grpc.inprocess InProcessServerBuilder)
            (io.grpc.stub ServerCalls
-                         ServerCalls$UnaryMethod)
-           (java.io PipedInputStream
-                    PipedOutputStream)))
+                         ServerCalls$UnaryMethod)))
 
 (defn unary-rpc
   [f]
@@ -23,30 +18,18 @@
         (.onCompleted responseObserver)
         responseObserver))))
 
-(def ^:private transit-marshaller
-  (reify MethodDescriptor$Marshaller
-    (parse [_ stream]
-      (-> stream (transit/reader :json) transit/read))
-    (stream [_ value]
-      (let [in (PipedInputStream. 4096)]
-        (with-open [out (PipedOutputStream. in)]
-          (-> out (transit/writer :json) (transit/write value)))
-        in))))
-
 (defn server
   [configuration]
   (let [builder (InProcessServerBuilder/forName (::name configuration))]
     (.addService builder
                  (reify BindableService
                    (bindService [_]
-                     (let [service-name "routeguide.RouteGuide"]
+                     (let [service-name "routeguide.RouteGuide"
+                           method-name "GetFeature"]
                        (-> (ServerServiceDefinition/builder service-name)
                            (.addMethod
-                            (MethodDescriptor/create MethodDescriptor$MethodType/UNARY
-                                                     (MethodDescriptor/generateFullMethodName service-name "GetFeature")
-                                                     transit-marshaller
-                                                     transit-marshaller)
-                            (ServerCalls/asyncUnaryCall (get-in configuration [::services 0 ::service-methods "GetFeature"])))
+                            (service/method-descriptor service-name method-name)
+                            (ServerCalls/asyncUnaryCall (get-in configuration [::services 0 ::service/methods method-name])))
                            .build)))))
     (.build builder)))
 
