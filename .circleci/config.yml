@@ -1,0 +1,11 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: circleci/clojure
+    working_directory: /reformatory
+    steps:
+      - checkout
+      - run:
+          command: lein test
+          name: Run tests
