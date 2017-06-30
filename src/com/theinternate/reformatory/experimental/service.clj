@@ -1,4 +1,4 @@
-(ns com.theinternate.reformatory.alpha.service
+(ns com.theinternate.reformatory.experimental.service
   (:require [cognitect.transit :as transit])
   (:import (java.io PipedInputStream
                     PipedOutputStream)

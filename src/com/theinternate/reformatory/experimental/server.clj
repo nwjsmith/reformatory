@@ -1,5 +1,5 @@
-(ns com.theinternate.reformatory.alpha.server
-  (:require [com.theinternate.reformatory.alpha.service :as service])
+(ns com.theinternate.reformatory.experimental.server
+  (:require [com.theinternate.reformatory.experimental.service :as service])
   (:import (io.grpc BindableService
                     Server
                     ServerServiceDefinition)

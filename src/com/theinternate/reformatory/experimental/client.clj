@@ -1,5 +1,5 @@
-(ns com.theinternate.reformatory.alpha.client
-  (:require [com.theinternate.reformatory.alpha.service :as service])
+(ns com.theinternate.reformatory.experimental.client
+  (:require [com.theinternate.reformatory.experimental.service :as service])
   (:import (io.grpc CallOptions)
            (io.grpc.stub ClientCalls)
            (io.grpc.inprocess InProcessChannelBuilder)))
