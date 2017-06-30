@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/clojure
-    working_directory: /reformatory
     steps:
       - checkout
       - run:
