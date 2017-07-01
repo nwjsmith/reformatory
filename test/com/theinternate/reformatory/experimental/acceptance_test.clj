@@ -11,19 +11,23 @@
 (deftest get-feature-test
   (let [unique-server-name (str "in-process server for " (ns-name *ns*))
         features (atom [])
-        server (server/server {::server/name unique-server-name
-                               ::server/services
-                               [{::service/name "routeguide.RouteGuide"
-                                 ::service/methods
-                                 {"GetFeature"
-                                  (server/unary-rpc (partial get-feature features))}}]})
+        service-name "routeguide.RouteGuide"
+        method-name "GetFeature"
+        server (server/server
+                {::server/name unique-server-name
+                 ::server/services
+                 [{::service/name service-name
+                   ::service/methods
+                   {method-name
+                    (server/unary-rpc (partial get-feature features))}}]})
         started (server/start server)
         channel (client/in-process-channel unique-server-name)
-        point {:latitude 1 :longitude 1}]
+        point {:latitude 1 :longitude 1}
+        client (client/unary-rpc channel service-name method-name)
+        feature {:name "name" :location point}]
       (try
-          (is (nil? ((client/unary-rpc channel "routeguide.RouteGuide" "GetFeature") point)))
-          (swap! features conj {:name "name" :location point})
-          (is (= {:name "name" :location point}
-                 ((client/unary-rpc channel "routeguide.RouteGuide" "GetFeature") point)))
-          (finally
-              (server/stop started)))))
+        (is (nil? (client point)))
+        (swap! features conj feature)
+        (is (= feature (client point)))
+        (finally
+          (server/stop started)))))
