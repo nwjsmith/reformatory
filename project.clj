@@ -3,12 +3,12 @@
   :url "https://github.com/nwjsmith/reformatory"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :scm {:name "git"
-        :tag "HEAD"
-        :url "https://github.com/nwjsmith/reformatory"}
-  :pom-addition [:developers [:developer {:id "nwjsmith"}
+  :scm {:url "https://github.com/nwjsmith/reformatory"}
+  :pom-addition [:developers [:developer
                               [:name "Nate Smith"]
-                              [:url "http://theinternate.com"]]]
+                              [:url "http://theinternate.com"]
+                              [:email "nwjsmith@gmail.com"]
+                              [:timezone "-5"]]]
   :deploy-repositories
   {"releases"
    {:url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
@@ -18,7 +18,7 @@
                   ["change" "version" "leiningen.release/bump-version" "patch"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
-                  ["vcs" "tag"]
+                  ["vcs" "tag" "v"]
                   ["deploy"]
                   ["vcs" "push"]]
   :pedantic? :abort
