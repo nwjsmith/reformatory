@@ -8,7 +8,7 @@
                               [:name "Nate Smith"]
                               [:url "http://theinternate.com"]
                               [:email "nwjsmith@gmail.com"]
-                              [:timezone "-5"]]]
+                              [:timezone "-4"]]]
   :deploy-repositories
   {"releases"
    {:url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
