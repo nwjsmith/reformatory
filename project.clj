@@ -15,6 +15,7 @@
     :username :env/sonatype_username
     :password :env/sonatype_password}}
   :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version" "leiningen.release/bump-version" "patch"]
                   ["change" "version" "leiningen.release/bump-version" "release"]
                   ["vcs" "commit"]
                   ["vcs" "tag"]
