@@ -12,9 +12,7 @@
   (reify ServerCalls$UnaryMethod
     (invoke [_ request responseObserver]
       (let [response (f request)]
-        (if (nil? response)
-          (.onNext responseObserver :sentinel/nil)
-          (.onNext responseObserver response))
+        (.onNext responseObserver (if (nil? response) :sentinel/nil response))
         (.onCompleted responseObserver)
         responseObserver))))
 
