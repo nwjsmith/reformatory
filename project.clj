@@ -1,4 +1,4 @@
-(defproject com.theinternate/reformatory "0.1.0-SNAPSHOT"
+(defproject com.theinternate/reformatory "0.1.0"
   :description "Coming soon."
   :url "https://github.com/nwjsmith/reformatory"
   :license {:name "Eclipse Public License"
@@ -9,6 +9,17 @@
   :pom-addition [:developers [:developer {:id "nwjsmith"}
                               [:name "Nate Smith"]
                               [:url "http://theinternate.com"]]]
+  :deploy-repositories
+  {"releases"
+   {:url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+    :username :env/sonatype_username
+    :password :env/sonatype_password}}
+  :release-tasks [["vcs" "assert-committed"]
+                  ["change" "version" "leiningen.release/bump-version" "release"]
+                  ["vcs" "commit"]
+                  ["vcs" "tag"]
+                  ["deploy"]
+                  ["vcs" "push"]]
   :pedantic? :abort
   :global-vars {*warn-on-reflection* true}
   :dependencies [[org.clojure/clojure "1.9.0-alpha17"]
