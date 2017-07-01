@@ -1,4 +1,4 @@
-(defproject com.theinternate/reformatory "0.1.1"
+(defproject com.theinternate/reformatory "0.1.2"
   :description "Coming soon."
   :url "https://github.com/nwjsmith/reformatory"
   :license {:name "Eclipse Public License"
