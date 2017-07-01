@@ -8,14 +8,14 @@
                                  TimeUnit)))
 
 (defn- get-feature
-  [features location responseObserver]
+  [features location ^StreamObserver responseObserver]
   (.onNext responseObserver
            (or (first (filter #(= location (:location %)) @features))
                {:name "" :location location}))
   (.onCompleted responseObserver))
 
 (defn- list-features
-  [features rectangle responseObserver]
+  [features rectangle ^StreamObserver responseObserver]
   (doseq [bounded (filter (fn [feature]
                             (and (not-empty (:name feature))
                                  (<= (:longitude (:lo rectangle))
