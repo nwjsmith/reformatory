@@ -15,7 +15,7 @@
         in))))
 
 (defn method-descriptor
-  [service-name method-name]
+  ^MethodDescriptor [service-name method-name]
   (MethodDescriptor/create MethodDescriptor$MethodType/UNARY
                            (MethodDescriptor/generateFullMethodName service-name method-name)
                            transit-marshaller

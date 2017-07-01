@@ -1,8 +1,9 @@
 (ns com.theinternate.reformatory.experimental.server
   (:require [com.theinternate.reformatory.experimental.service :as service])
-  (:import (io.grpc BindableService
-                    Server
-                    ServerServiceDefinition)
+  (:import (io.grpc Server
+                    ServerBuilder
+                    ServerServiceDefinition
+                    ServerServiceDefinition$Builder)
            (io.grpc.inprocess InProcessServerBuilder)
            (io.grpc.stub ServerCalls
                          ServerCalls$UnaryMethod)))
@@ -16,20 +17,24 @@
         (.onCompleted responseObserver)
         responseObserver))))
 
+(defn- service-definition
+  ^ServerServiceDefinition [service]
+  (let [name (::service/name service)]
+    (.build ^ServerServiceDefinition$Builder
+            (reduce (fn [^ServerServiceDefinition$Builder builder [method rpc]]
+                      (.addMethod builder
+                                  (service/method-descriptor name method)
+                                  (ServerCalls/asyncUnaryCall rpc)))
+                    (ServerServiceDefinition/builder ^String name)
+                    (::service/methods service)))))
+
 (defn server
   [configuration]
-  (let [builder (InProcessServerBuilder/forName (::name configuration))]
-    (.addService builder
-                 (reify BindableService
-                   (bindService [_]
-                     (let [service-name "routeguide.RouteGuide"
-                           method-name "GetFeature"]
-                       (-> (ServerServiceDefinition/builder service-name)
-                           (.addMethod
-                            (service/method-descriptor service-name method-name)
-                            (ServerCalls/asyncUnaryCall (get-in configuration [::services 0 ::service/methods method-name])))
-                           .build)))))
-    (.build builder)))
+  (.build ^ServerBuilder
+          (reduce (fn [^ServerBuilder builder service]
+                    (.addService builder (service-definition service)))
+                  (InProcessServerBuilder/forName (::name configuration))
+                  (::services configuration))))
 
 (defn start
   [^Server server]
