@@ -13,4 +13,5 @@ jobs:
 workflows:
   version: 2
   pipeline:
-    - test
+    jobs:
+      - test
