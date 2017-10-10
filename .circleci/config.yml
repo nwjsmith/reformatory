@@ -1,6 +1,6 @@
 version: 2.0
 jobs:
-  build:
+  test:
     docker:
       - image: circleci/clojure
     working_directory: ~/reformatory
@@ -9,3 +9,8 @@ jobs:
       - run:
           command: lein test
           name: Run tests
+
+workflows:
+  version: 2
+  pipeline:
+    - test
